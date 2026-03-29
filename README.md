@@ -44,6 +44,13 @@ py -3 app.py
 
 Windows `.exe` hedefi icin arayuz ve backend tarayici tabanli tutulmustur; bu sayede macOS ve Windows tarafinda ayni HTML/CSS/JS calisir. Bu repoda Windows paketleme komutu [build_windows.bat](/Users/umutkara/Desktop/Umut/PROJECT/KarpuzVetHastaTakip/build_windows.bat) icinde hazirdir.
 
+Komut satiri bilmeyen son kullanicilar icin hedef dosya:
+
+- `setup.exe`
+- `KarpuzVetPatoloji-Windows.zip`
+
+Bu kurulum dosyasi GitHub `Actions` altindaki `Build Windows Installer` workflow'u ile uretilecek sekilde hazirlanmistir.
+
 ## Test
 
 ```bash
@@ -72,6 +79,19 @@ Yedekler su klasore yazilir:
 
 - `~/KarpuzVetHastaTakip/backups/`
 
+## Loglar
+
+Uygulama acildiginda log dosyalari su klasore yazilir:
+
+- `~/KarpuzVetHastaTakip/logs/`
+
+Olusan ana dosyalar:
+
+- `app-YYYY-MM-DD.log`
+- `errors-YYYY-MM-DD.log`
+
+Bir problem oldugunda bu dosyalari isteyebiliriz.
+
 ## PDF Ciktilari
 
 PDF ciktilari su klasore yazilir:
@@ -94,5 +114,6 @@ PyInstaller ile paketleme icin yardimci scriptler:
 
 - [build_macos.sh](/Users/umutkara/Desktop/Umut/PROJECT/KarpuzVetHastaTakip/build_macos.sh)
 - [build_windows.bat](/Users/umutkara/Desktop/Umut/PROJECT/KarpuzVetHastaTakip/build_windows.bat)
+- [installer_windows.iss](/Users/umutkara/Desktop/Umut/PROJECT/KarpuzVetHastaTakip/installer_windows.iss)
 
 macOS tarafinda burada `.app` uretebilirim. Windows `.exe` dosyasi ise normalde Windows ortaminda build edilmelidir.
