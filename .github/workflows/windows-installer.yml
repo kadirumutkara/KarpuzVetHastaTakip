@@ -1,5 +1,8 @@
 name: Build Windows Installer
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 on:
   workflow_dispatch:
   push:
@@ -24,7 +27,8 @@ jobs:
           pip install pyinstaller reportlab pypdf
 
       - name: Build app bundle
-        run: build_windows.bat
+        shell: pwsh
+        run: .\build_windows.bat
 
       - name: Build setup exe
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
