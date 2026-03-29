@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Karpuz Vet Patoloji</title>
+  <link rel="icon" href="/assets/logo.jpeg">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="app">
+    <section id="login-screen" class="screen active">
+      <div class="login-card">
+        <img class="login-logo" src="/assets/logo.jpeg" alt="Karpuz Vet Logo">
+        <div class="brand">Karpuz Vet</div>
+        <div class="hint">Kullanıcı adı ve şifre ile giriş yapın.</div>
+        <label>Kullanıcı Adı</label>
+        <input id="login-username" type="text" placeholder="Kullanıcı adınızı girin" autocomplete="username" />
+        <label>Şifre</label>
+        <input id="login-password" type="password" placeholder="Şifrenizi girin" autocomplete="current-password" />
+        <button id="login-button">Giriş Yap</button>
+        <div id="login-error" class="error"></div>
+      </div>
+    </section>
+
+    <section id="main-screen" class="screen">
+      <div class="app-shell">
+        <aside class="sidebar">
+          <div class="sidebar-brand">
+            <div class="sidebar-brand-mark" aria-hidden="true">
+              <img src="/assets/logo.jpeg" alt="Karpuz Vet">
+            </div>
+            <div class="sidebar-brand-copy">
+              <strong>Karpuz Vet</strong>
+              <span>Patoloji Laboratuvarı</span>
+            </div>
+          </div>
+          <nav class="tabs sidebar-tabs">
+            <button class="tab active" data-tab="dashboard">Genel Panel</button>
+            <button class="tab" data-tab="cases">Hasta Kayıt</button>
+            <button class="tab" data-tab="case-form">Yeni Kayıt / Düzenle</button>
+            <button class="tab" data-tab="import">Excel İçe Aktar</button>
+            <button class="tab admin-only" data-tab="users">Kullanıcılar</button>
+            <button class="tab admin-only" data-tab="pricing">Tetkik Tanımları</button>
+          </nav>
+          <div class="sidebar-note">
+            <div class="muted-label">Çalışma Tipi</div>
+            <strong>Tek bilgisayar, lokal veritabanı</strong>
+            <p>Bu yapı Windows tarafında da aynı tarayıcı arayüzüyle çalışır.</p>
+          </div>
+        </aside>
+
+        <div class="content-shell">
+          <header class="topbar">
+            <div>
+              <h1>Karpuz Veteriner Patoloji Takip</h1>
+              <p id="session-info"></p>
+            </div>
+            <div class="stats" id="stats"></div>
+          </header>
+
+          <main>
+            <section id="tab-dashboard" class="tab-panel active">
+              <div class="dashboard-grid">
+                <div class="panel-card">
+                  <h2>Açık Vakalar</h2>
+                  <table id="dashboard-table"></table>
+                </div>
+                <div class="panel-card">
+                  <h2>Finans Özeti</h2>
+                  <div id="finance-summary" class="finance-summary"></div>
+                </div>
+              </div>
+            </section>
+
+            <section id="tab-cases" class="tab-panel">
+              <div class="split-layout">
+                <div class="panel-card">
+                  <div class="toolbar">
+                    <input id="search-input" type="text" placeholder="Protokol, hasta, sahip, klinik ara">
+                    <select id="status-filter">
+                      <option value="">Tüm durumlar</option>
+                      <option>Kabul Edildi</option>
+                      <option>Makroskopi Bekliyor</option>
+                      <option>Rapor Hazirlaniyor</option>
+                      <option>Tamamlandi</option>
+                    </select>
+                    <button id="search-button">Ara</button>
+                  </div>
+                  <table id="cases-table"></table>
+                </div>
+                <div class="panel-card">
+                  <h2>Hasta Kayıt Özeti</h2>
+                  <div id="selected-case-summary" class="case-summary empty-state">Soldaki listeden bir hasta / vaka seçin.</div>
+                </div>
+              </div>
+            </section>
+
+            <section id="tab-case-form" class="tab-panel">
+              <div class="panel-card">
+                <h2>Vaka Formu</h2>
+                <div id="case-form" class="form-grid"></div>
+                <div class="panel-divider"></div>
+                <h3>Yapılan Tetkikler</h3>
+                <p class="section-help">Bir hastaya birden fazla tetkik ekleyebilirsiniz. Adet ve birim fiyatı satır üzerinde değiştirebilirsiniz.</p>
+                <div class="toolbar">
+                  <select id="test-category-filter"></select>
+                  <select id="test-type-select"></select>
+                  <input id="test-quantity" type="number" min="1" value="1" placeholder="Adet">
+                  <button id="add-test-button" type="button">Tetkik Ekle</button>
+                </div>
+                <table id="case-tests-table"></table>
+                <div class="actions">
+                  <button id="save-case-button">Kaydet</button>
+                  <button id="new-case-button" class="secondary">Yeni Form</button>
+                  <button id="pdf-button" class="secondary">Rapor PDF</button>
+                  <button id="billing-pdf-button" class="secondary">Borç Detayı PDF</button>
+                  <button id="proforma-pdf-button" class="secondary">Proforma PDF</button>
+                  <button id="request-form-pdf-button" class="secondary">Analiz Talep PDF</button>
+                </div>
+                <div id="case-message" class="success"></div>
+              </div>
+            </section>
+
+            <section id="tab-import" class="tab-panel">
+              <div class="panel-card">
+                <h2>Excel Aktar</h2>
+                <p class="section-help">İçe aktar ekranı, mevcut Excel kayıtlarını başlangıç verisi olarak sisteme toplu yüklemek içindir.</p>
+                <label>Excel Dosya Yolu</label>
+                <input id="import-path" type="text" placeholder="/Users/.../KAYITLAR.xlsx">
+                <div class="actions">
+                  <button id="import-button">İçe Aktar</button>
+                </div>
+                <pre id="import-result"></pre>
+              </div>
+            </section>
+
+            <section id="tab-users" class="tab-panel admin-only">
+              <div class="panel-card">
+                <h2>Kullanıcı Yönetimi</h2>
+                <table id="users-table"></table>
+                <div id="user-form" class="form-grid compact"></div>
+                <div class="actions">
+                  <button id="save-user-button">Kullanıcı Kaydet</button>
+                  <button id="new-user-button" class="secondary">Yeni Kullanıcı</button>
+                </div>
+                <div id="user-message" class="success"></div>
+              </div>
+            </section>
+            <section id="tab-pricing" class="tab-panel admin-only">
+              <div class="panel-card">
+                <h2>Tetkik Tanım ve Fiyat Listesi</h2>
+                <p class="section-help">Bu ekran yalnızca admin içindir. Buradan tetkik kodu, adı ve fiyatını tanımlayıp sonradan değiştirebilirsiniz.</p>
+                <div class="toolbar">
+                  <input id="test-type-search" type="text" placeholder="Kod, kategori veya tetkik adı ara">
+                </div>
+                <table id="test-types-table"></table>
+                <div id="test-type-form" class="form-grid compact"></div>
+                <div class="actions">
+                  <button id="save-test-type-button">Fiyat Kaydet</button>
+                  <button id="new-test-type-button" class="secondary">Yeni Tetkik</button>
+                </div>
+                <div id="test-type-message" class="success"></div>
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

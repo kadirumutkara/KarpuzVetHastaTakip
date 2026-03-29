@@ -1,0 +1,17 @@
+.DS_Store
+.pyinstaller/
+build/
+dist/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.db
+*.sqlite
+*.sqlite3
+*.log
+analysis_assets/frames/
+KarpuzVetPatoloji.spec
