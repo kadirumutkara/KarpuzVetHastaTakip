@@ -39,8 +39,7 @@
             <button class="tab active" data-tab="dashboard">Genel Panel</button>
             <button class="tab" data-tab="cases">Hasta Kayıt</button>
             <button class="tab" data-tab="case-form">Yeni Kayıt / Düzenle</button>
-            <button class="tab" data-tab="import">Excel İçe Aktar</button>
-            <button class="tab admin-only" data-tab="users">Kullanıcılar</button>
+            <button class="tab admin-only" data-tab="users">Admin Paneli</button>
             <button class="tab admin-only" data-tab="pricing">Tetkik Tanımları</button>
           </nav>
           <div class="sidebar-note">
@@ -99,6 +98,7 @@
             <section id="tab-case-form" class="tab-panel">
               <div class="panel-card">
                 <h2>Vaka Formu</h2>
+                <p class="section-help">Protokol no boş bırakılırsa sistem otomatik sıradaki numarayı verir.</p>
                 <div id="case-form" class="form-grid"></div>
                 <div class="panel-divider"></div>
                 <h3>Yapılan Tetkikler</h3>
@@ -122,29 +122,28 @@
               </div>
             </section>
 
-            <section id="tab-import" class="tab-panel">
-              <div class="panel-card">
-                <h2>Excel Aktar</h2>
-                <p class="section-help">İçe aktar ekranı, mevcut Excel kayıtlarını başlangıç verisi olarak sisteme toplu yüklemek içindir.</p>
-                <label>Excel Dosya Yolu</label>
-                <input id="import-path" type="text" placeholder="/Users/.../KAYITLAR.xlsx">
-                <div class="actions">
-                  <button id="import-button">İçe Aktar</button>
-                </div>
-                <pre id="import-result"></pre>
-              </div>
-            </section>
-
             <section id="tab-users" class="tab-panel admin-only">
-              <div class="panel-card">
-                <h2>Kullanıcı Yönetimi</h2>
-                <table id="users-table"></table>
-                <div id="user-form" class="form-grid compact"></div>
-                <div class="actions">
-                  <button id="save-user-button">Kullanıcı Kaydet</button>
-                  <button id="new-user-button" class="secondary">Yeni Kullanıcı</button>
+              <div class="admin-grid">
+                <div class="panel-card">
+                  <h2>Kullanıcı Yönetimi</h2>
+                  <table id="users-table"></table>
+                  <div id="user-form" class="form-grid compact"></div>
+                  <div class="actions">
+                    <button id="save-user-button">Kullanıcı Kaydet</button>
+                    <button id="new-user-button" class="secondary">Yeni Kullanıcı</button>
+                  </div>
+                  <div id="user-message" class="success"></div>
                 </div>
-                <div id="user-message" class="success"></div>
+                <div class="panel-card">
+                  <h2>Excel İçe Aktar</h2>
+                  <p class="section-help">Bu alan sadece admin içindir. Eski Excel kayıtlarını sisteme toplu yüklemek için kullanılır.</p>
+                  <label>Excel Dosya Yolu</label>
+                  <input id="import-path" type="text" placeholder="/Users/.../KAYITLAR.xlsx">
+                  <div class="actions">
+                    <button id="import-button">İçe Aktar</button>
+                  </div>
+                  <pre id="import-result"></pre>
+                </div>
               </div>
             </section>
             <section id="tab-pricing" class="tab-panel admin-only">

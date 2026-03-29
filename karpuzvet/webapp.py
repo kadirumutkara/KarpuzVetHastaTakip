@@ -4,6 +4,7 @@ import json
 import mimetypes
 import secrets
 import socket
+import re
 import sys
 import threading
 import urllib.parse
@@ -122,6 +123,22 @@ def _build_case_from_payload(payload: dict[str, object], case_id=None) -> CaseRe
     )
 
 
+def _slugify_filename_part(value: str | None, fallback: str) -> str:
+    raw = (value or "").strip()
+    if not raw:
+        return fallback
+    normalized = raw.replace("/", "-").replace("\\", "-").replace(" ", "_")
+    normalized = re.sub(r"[^0-9A-Za-zÇĞİÖŞÜçğıöşü_-]+", "", normalized)
+    return normalized[:80] or fallback
+
+
+def _build_export_filename(case: CaseRecord, suffix: str) -> str:
+    date_part = _slugify_filename_part(case.acceptance_date, "tarih-yok")
+    patient_part = _slugify_filename_part(case.patient_name, "hasta-yok")
+    protocol_part = _slugify_filename_part(case.protocol_no, "protokol-yok")
+    return f"{suffix}_{date_part}_{patient_part}_{protocol_part}.pdf"
+
+
 def make_handler(app: KarpuzWebApp):
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
@@ -157,7 +174,7 @@ def make_handler(app: KarpuzWebApp):
                 case = app.db.get_case(int(case_id_raw))
                 export_dir = DEFAULT_APP_DIR / "exports"
                 export_dir.mkdir(parents=True, exist_ok=True)
-                target = export_dir / f"{case.protocol_no.replace('/', '-')}.pdf"
+                target = export_dir / _build_export_filename(case, "rapor")
                 build_case_pdf(case, target)
                 if params.get("download", ["0"])[0] == "1":
                     return _file_response(self, target, target.name)
@@ -174,7 +191,7 @@ def make_handler(app: KarpuzWebApp):
                 tests = app.db.list_case_tests(int(case_id_raw))
                 export_dir = DEFAULT_APP_DIR / "exports"
                 export_dir.mkdir(parents=True, exist_ok=True)
-                target = export_dir / f"{case.protocol_no.replace('/', '-')}-borc.pdf"
+                target = export_dir / _build_export_filename(case, "borc-detayi")
                 build_billing_pdf(case, tests, target)
                 if params.get("download", ["0"])[0] == "1":
                     return _file_response(self, target, target.name)
@@ -191,7 +208,7 @@ def make_handler(app: KarpuzWebApp):
                 tests = app.db.list_case_tests(int(case_id_raw))
                 export_dir = DEFAULT_APP_DIR / "exports"
                 export_dir.mkdir(parents=True, exist_ok=True)
-                target = export_dir / f"{case.protocol_no.replace('/', '-')}-analiz-talep.pdf"
+                target = export_dir / _build_export_filename(case, "analiz-talep")
                 build_request_form_pdf(case, tests, target)
                 if params.get("download", ["0"])[0] == "1":
                     return _file_response(self, target, target.name)
@@ -208,7 +225,7 @@ def make_handler(app: KarpuzWebApp):
                 tests = app.db.list_case_tests(int(case_id_raw))
                 export_dir = DEFAULT_APP_DIR / "exports"
                 export_dir.mkdir(parents=True, exist_ok=True)
-                target = export_dir / f"{case.protocol_no.replace('/', '-')}-proforma.pdf"
+                target = export_dir / _build_export_filename(case, "proforma")
                 build_proforma_pdf(case, tests, target)
                 if params.get("download", ["0"])[0] == "1":
                     return _file_response(self, target, target.name)

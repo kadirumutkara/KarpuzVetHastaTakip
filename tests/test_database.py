@@ -19,6 +19,15 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(fetched.protocol_no, "26-101")
         self.assertEqual(fetched.patient_name, "Mina")
 
+    def test_protocol_no_auto_generated_when_blank(self):
+        saved = self.db.save_case(CaseRecord(protocol_no="", patient_name="Mina"))
+        self.assertRegex(saved.protocol_no, r"^\d{2}-\d{2,}$")
+
+    def test_protocol_no_auto_generation_increments(self):
+        first = self.db.save_case(CaseRecord(protocol_no="", patient_name="Bir"))
+        second = self.db.save_case(CaseRecord(protocol_no="", patient_name="Iki"))
+        self.assertNotEqual(first.protocol_no, second.protocol_no)
+
     def test_upsert_by_protocol_number(self):
         self.db.save_case(CaseRecord(protocol_no="26-102", patient_name="Ilk"))
         saved = self.db.save_case(CaseRecord(protocol_no="26-102", patient_name="Guncel"))

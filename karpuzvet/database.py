@@ -32,6 +32,9 @@ DEFAULT_TEST_TYPES = [
     {"code": "10.00.00.011", "name": "Immunhistokimya", "category": "Immunhistokimya", "unit_price": 3500.0},
 ]
 
+DEFAULT_REPORT_ASSISTANT = "Doç. Dr. Gülbin ŞENAZLI"
+DEFAULT_REPORT_SIGNER = ""
+
 
 @dataclass
 class CaseRecord:
@@ -287,6 +290,8 @@ class Database:
 
     def save_case(self, record: CaseRecord) -> CaseRecord:
         payload = record.as_db_dict()
+        if not str(payload.get("protocol_no", "")).strip():
+            payload["protocol_no"] = self.generate_protocol_no()
         now = datetime.now().isoformat(timespec="seconds")
         with self.connect() as conn:
             if record.id:
@@ -385,6 +390,23 @@ class Database:
                     saved = _row_to_case(row)
         self._create_backup_snapshot()
         return saved
+
+    def generate_protocol_no(self) -> str:
+        year_prefix = f"{datetime.now().year % 100:02d}-"
+        next_seq = 1
+        with self.connect() as conn:
+            rows = conn.execute(
+                "SELECT protocol_no FROM cases WHERE protocol_no LIKE ?",
+                (f"{year_prefix}%",),
+            ).fetchall()
+        for row in rows:
+            protocol = str(row["protocol_no"] or "")
+            if not protocol.startswith(year_prefix):
+                continue
+            suffix = protocol[len(year_prefix):].strip()
+            if suffix.isdigit():
+                next_seq = max(next_seq, int(suffix) + 1)
+        return f"{year_prefix}{next_seq:02d}"
 
     def get_case(self, case_id: int) -> CaseRecord:
         with self.connect() as conn:
@@ -522,7 +544,6 @@ class Database:
             return None
         if not verify_password(password, row["password_hash"]):
             return None
-        self._create_backup_snapshot()
         return _row_to_user(row)
 
     def list_users(self) -> List[UserRecord]:
@@ -540,7 +561,6 @@ class Database:
             ).fetchone()
         if not row:
             raise KeyError(f"User {user_id} bulunamadi")
-        self._create_backup_snapshot()
         return _row_to_user(row)
 
     def create_user(self, username: str, password: str, full_name: str, role: str = "user", is_active: int = 1) -> UserRecord:
@@ -563,6 +583,7 @@ class Database:
                 "SELECT id, username, full_name, role, is_active FROM users WHERE id = ?",
                 (cursor.lastrowid,),
             ).fetchone()
+        self._create_backup_snapshot()
         return _row_to_user(row)
 
     def update_user(self, user_id: int, full_name: str, role: str, is_active: int, password: str = "") -> UserRecord:
@@ -600,4 +621,5 @@ class Database:
                 "SELECT id, username, full_name, role, is_active FROM users WHERE id = ?",
                 (user_id,),
             ).fetchone()
+        self._create_backup_snapshot()
         return _row_to_user(row)
