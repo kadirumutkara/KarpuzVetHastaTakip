@@ -74,10 +74,13 @@ def _file_response(handler: BaseHTTPRequestHandler, file_path: Path, download_na
     body = file_path.read_bytes()
     handler.send_response(HTTPStatus.OK)
     handler.send_header("Content-Type", "application/pdf")
-    handler.send_header("Content-Length", str(len(body)))
-    handler.send_header("Content-Disposition", f'attachment; filename="{download_name}"')
+    quoted_name = urllib.parse.quote(download_name)
+    handler.send_header("Content-Disposition", f"attachment; filename*=UTF-8''{quoted_name}")
+    handler.send_header("Cache-Control", "no-store")
     handler.end_headers()
     handler.wfile.write(body)
+    handler.wfile.flush()
+    handler.close_connection = True
 
 
 def _read_json(handler: BaseHTTPRequestHandler) -> dict[str, object]:
