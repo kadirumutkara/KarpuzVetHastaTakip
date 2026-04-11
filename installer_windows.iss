@@ -1,5 +1,5 @@
 #define MyAppName "Karpuz Vet Patoloji"
-#define MyAppVersion "0.1.0"
+#define MyAppVersion "0.1.1"
 #define MyAppPublisher "Karpuz Patoloji"
 #define MyAppExeName "KarpuzVetPatoloji.exe"
 
@@ -19,6 +19,10 @@ WizardStyle=modern
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\{#MyAppExeName}
+CloseApplications=yes
+ForceCloseApplications=yes
+RestartApplications=no
+CloseApplicationsFilter={#MyAppExeName}
 
 [Languages]
 Name: "turkish"; MessagesFile: "compiler:Languages\Turkish.isl"
