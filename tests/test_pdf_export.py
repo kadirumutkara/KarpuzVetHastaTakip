@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 from karpuzvet.database import CaseRecord, CaseTestRecord
-from karpuzvet.pdf_export import build_billing_pdf, build_case_pdf, build_proforma_pdf, build_request_form_pdf
+from karpuzvet.pdf_export import FONT_PATHS, OVERLAY_FONT_PATHS, build_billing_pdf, build_case_pdf, build_proforma_pdf, build_request_form_pdf
 
 
 class PdfExportTests(unittest.TestCase):
@@ -104,6 +104,14 @@ class PdfExportTests(unittest.TestCase):
             )
             self.assertTrue(target.exists())
             self.assertGreater(target.stat().st_size, 500)
+
+    def test_windows_font_candidates_exist_in_configuration(self):
+        font_paths = {str(path).lower() for _, path in FONT_PATHS}
+        overlay_paths = {str(path).lower() for _, path in OVERLAY_FONT_PATHS}
+        self.assertIn("c:/windows/fonts/arial.ttf", font_paths)
+        self.assertIn("c:/windows/fonts/arialbd.ttf", font_paths)
+        self.assertIn("c:/windows/fonts/arial.ttf", overlay_paths)
+        self.assertIn("c:/windows/fonts/arialbd.ttf", overlay_paths)
 
 
 if __name__ == "__main__":

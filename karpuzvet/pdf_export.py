@@ -29,6 +29,12 @@ FONT_BOLD_NAME = "KarpuzTimesBold"
 OVERLAY_FONT_NAME = "KarpuzArial"
 OVERLAY_BOLD_FONT_NAME = "KarpuzArialBold"
 FONT_PATHS = [
+    (FONT_NAME, Path("C:/Windows/Fonts/times.ttf")),
+    (FONT_BOLD_NAME, Path("C:/Windows/Fonts/timesbd.ttf")),
+    (FONT_NAME, Path("C:/Windows/Fonts/georgia.ttf")),
+    (FONT_BOLD_NAME, Path("C:/Windows/Fonts/georgiab.ttf")),
+    (FONT_NAME, Path("C:/Windows/Fonts/arial.ttf")),
+    (FONT_BOLD_NAME, Path("C:/Windows/Fonts/arialbd.ttf")),
     (FONT_NAME, Path("/System/Library/Fonts/Supplemental/Times New Roman.ttf")),
     (FONT_BOLD_NAME, Path("/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf")),
     (FONT_NAME, Path("/System/Library/Fonts/Supplemental/Georgia.ttf")),
@@ -37,6 +43,8 @@ FONT_PATHS = [
     (FONT_BOLD_NAME, Path("/System/Library/Fonts/Supplemental/Arial Bold.ttf")),
 ]
 OVERLAY_FONT_PATHS = [
+    (OVERLAY_FONT_NAME, Path("C:/Windows/Fonts/arial.ttf")),
+    (OVERLAY_BOLD_FONT_NAME, Path("C:/Windows/Fonts/arialbd.ttf")),
     (OVERLAY_FONT_NAME, Path("/System/Library/Fonts/Supplemental/Arial.ttf")),
     (OVERLAY_BOLD_FONT_NAME, Path("/System/Library/Fonts/Supplemental/Arial Bold.ttf")),
     (OVERLAY_FONT_NAME, Path("/Library/Fonts/Arial Unicode.ttf")),
